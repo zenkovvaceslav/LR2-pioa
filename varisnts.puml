@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+actor "Студент" as s
+actor "Преподаватель" as p
+
+rectangle {
+  
+  usecase "Подготовка к экзамену" as UC1
+  usecase "Утро экзамена" as UC2
+  usecase "Сдача экзамена" as UC3
+  usecase "Получение оценки" as UC4
+  
+  usecase "Сделать шпаргалку" as UC1_1
+  usecase "Лечь спать" as UC1_2
+  
+  usecase "Опоздать" as UC2_1
+  usecase "Прийти вовремя" as UC2_2
+  
+  usecase "Использовать шпаргалку" as UC3_1
+  usecase "Использовать конспекты" as UC3_2
+  usecase "Списать с телефона" as UC3_3
+  usecase "Попросить помощи" as UC3_4
+  usecase "Выйти в туалет" as UC3_5
+  usecase "Сыграть в КНБ" as UC3_6
+}
+
+
+s --> UC1
+s --> UC2
+s --> UC3
+s --> UC4
+
+p --> UC3_6
+
+UC1 --> UC1_1
+UC1 --> UC1_2
+UC2 --> UC2_1
+UC2 --> UC2_2
+UC3 --> UC3_1
+UC3 --> UC3_2
+UC3 --> UC3_3
+UC3 --> UC3_4
+UC3 --> UC3_5
+UC3 --> UC3_6
+UC3_1 --> UC4 : риск провала
+UC3_2 --> UC4 : оценка 5
+UC3_3 --> UC4 : оценка 4
+UC3_4 --> UC4 : оценка 4
+UC3_5 --> UC4 : провал
+UC3_6 --> UC4 : бонус к оценке
+@enduml
