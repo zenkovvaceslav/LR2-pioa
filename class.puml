@@ -1,0 +1,153 @@
+@startuml
+' Настройка внешнего вида
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor Black
+}
+
+class Item {
+
+    def __init__(self, name, description, exam_bonus=0, is_cheatsheet=False, is_notebook_with_notes=False): #по сути конструктор предметов, он нужен чтобы распределить предметы по категориям которые ниже
+        self.name = name
+        self.description = description
+        self.exam_bonus = exam_bonus
+        self.is_cheatsheet = is_cheatsheet
+        self.is_notebook_with_notes = is_notebook_with_notes
+        self.used = False
+==
+    def use_on_exam(self): #это используется на экзамене, использован предмет иои нет
+        if self.used:
+            return False, f"{self.name} уже использована"
+        
+        self.used = True
+        
+        if self.is_cheatsheet:
+            return True, f"Использовал '{self.name}'"
+        elif self.is_notebook_with_notes:
+            return True, f"Использовал {self.name} с конспектами"
+        else:
+            return True, f"Использовал {self.name}"
+
+}
+
+class Student {
+
+def __init__(self, name):
+        self.name = name, self.has_eaten = False, self.is_late = False, self.exam_passed = False, self.grade = None, self.inventory = []
+        self.cheat_sheet_made = False
+        self.game_won_with_professor = False
+        self.bonus_points = 0
+        self.slept_well = True
+--
+    def add_item(self, item):
+        self.inventory.append(item)
+--   
+    def get_cheat_sheet(self):
+        for item in self.inventory:
+            if item.is_cheatsheet:
+                return item
+        return None
+--    
+    def get_notebook(self):
+        for item in self.inventory:
+            if item.name == "Тетрадь":
+                return item
+        return None
+--    
+    def get_notebook_with_notes(self):
+        for item in self.inventory:
+            if item.is_notebook_with_notes:
+                return item
+        return None
+--    
+    def get_phone(self):
+        for item in self.inventory:
+            if item.name == "Телефон":
+                return item
+        return None
+--    
+    def get_bun(self):
+        for item in self.inventory:
+            if item.name == "Бутер с колбасой":
+                return item
+        return None
+--    
+    def show_inventory(self):
+        if not self.inventory:
+            return "Карманф пусты"
+        result = "Что у тебя есть:\n"
+        for i, item in enumerate(self.inventory, 1):
+            result += f"  {i}. {item.name}"
+            if item.is_cheatsheet:
+                result += " (шпаргалка)"
+            if item.is_notebook_with_notes:
+                result += " (конспекты)"
+            result += "\n"
+        return result
+--
+    def eat_bun(self):
+        for i, item in enumerate(self.inventory):
+            if item.name == "Бутер с колбасой":
+                self.inventory.pop(i)
+                self.has_eaten = True
+                return True
+        return False
+
+
+}
+
+class Game {
+    - student: Student
+    - game_active: boolean
+    - results_file: String
+    - current_scene: String
+    - exam_subject: String
+    - __init__()
+    - show_title(): void
+    - get_choice(prompt: String, options: List<String>): int
+    - will_catch_cheating(is_late: boolean, using_notebook_with_notes: boolean): boolean
+    - play_rock_paper_scissors(): boolean
+    - save_result(result: String, is_win: boolean): void
+    - game_over(reason: String): void
+    - game_won(reason: String): void
+    - preparation_scene(): boolean
+    - morning_scene(): boolean
+    - exam_scene(): boolean
+    - late_exam_choices(): boolean
+    - on_time_exam_choices(): boolean
+    - final_scene(): boolean
+    - start_game(): void
+    - main_menu(): void
+}
+
+' Отношения между классами
+Student "1" *-- "0..*" Item : содержит
+Game "1" *-- "1" Student : управляет
+
+' Примечания
+note top of Item
+    Предметы в игре:
+    - Шпаргалка (is_cheatsheet = true)
+    - Тетрадь с конспектами (is_notebook_with_notes = true)
+    - Бутер, Ручка, Телефон и т.д.
+end note
+
+note top of Student
+    Состояние студента:
+    - Сытость
+    - Опоздание
+    - Оценка
+    - Инвентарь
+    - Выспался ли
+end note
+
+note top of Game
+    Основной движок игры:
+    - Управление сценами
+    - Механики экзамена
+    - Сохранение результатов
+    - Мини-игра КНБ
+end note
+@enduml
