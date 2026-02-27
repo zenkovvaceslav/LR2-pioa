@@ -1,0 +1,38 @@
+@startuml
+package {
+  
+  [меню] as menu
+  [лвижок] as engine
+  [сцены] as scenes
+  [студент] as student
+  [предметы] as items
+  [сохранение] as save
+  
+  component "подготовка" as prep
+  component "утро" as morn
+  component "экзамен" as exam
+  component "финал" as final
+  
+  component "шпаргалка" as cheat
+  component "конспекты" as note
+  component "бутер" as but
+  component "телефон" as phone
+}
+
+menu --> engine
+engine --> scenes
+scenes --> prep
+scenes --> morn
+scenes --> exam
+scenes --> final
+
+engine --> student
+student --> items
+items --> cheat
+items --> note
+items --> but
+items --> phone
+
+exam --> engine
+engine --> save
+@enduml
