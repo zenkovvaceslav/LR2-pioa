@@ -1,0 +1,87 @@
+@startuml
+left to right direction
+
+entity "Студент" as student {
+  + id: int [PK]
+  --
+  name: varchar
+  has_eaten: boolean
+  is_late: boolean
+  exam_passed: boolean
+  grade: varchar
+  cheat_sheet_made: boolean
+  game_won_with_professor: boolean
+  bonus_points: int
+  slept_well: boolean
+}
+
+entity "Предмет" as item {
+  + id: int [PK]
+  --
+  name: varchar
+  description: text
+  exam_bonus: int
+  is_cheatsheet: boolean
+  is_notebook_with_notes: boolean
+  used: boolean
+}
+
+entity "Инвентарь" as inventory {
+  + id: int [PK]
+  --
+  student_id: int [FK]
+  item_id: int [FK]
+  получен_в_сцене: varchar
+}
+
+entity "Сцена" as scene {
+  + id: int [PK]
+  --
+  название: varchar
+  описание: text
+}
+
+entity "Результат игры" as result {
+  + id: int [PK]
+  --
+  student_id: int [FK]
+  дата_игры: datetime
+  исход: varchar
+  оценка: varchar
+  причина: text
+}
+
+entity "Сохранение" as save {
+  + id: int [PK]
+  --
+  student_id: int [FK]
+  current_scene: varchar
+  дата_сохранения: datetime
+}
+
+
+student ||--o{ inventory : "имеет"
+item ||--o{ inventory : "включает"
+
+student ||--o{ result : "получает"
+student ||--o{ save : "сохраняется"
+
+scene ||--o{ save : "текущая"
+
+note right of student
+  Пример данных:
+  name: 'Иван'
+  has_eaten: true
+  is_late: false
+  grade: '5'
+end note
+
+note right of item
+  Примеры предметов:
+  1. Шпаргалка
+  2. Тетрадь с конспектами
+  3. Бутер с колбасой
+  4. Ручка
+  5. Телефон
+end note
+@enduml
